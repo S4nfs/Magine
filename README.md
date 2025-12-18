@@ -11,8 +11,8 @@
 - [x] 500-image upload limit  
 - [ ] On-demand server support  
 - [ ] Minimalist UI  
-- [x] ARR $10k
-- [ ] Target MRR
+- [x] MRR $10k
+- [ ] Target ARR
 - [x] Bishop, Knight, King, Queen, Rook, and Pawn Share
 - [ ] Partner ETFs
 - [ ] 8000OPs with 4PB Bandwidth
