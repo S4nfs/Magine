@@ -11,3 +11,5 @@
 - [ ] 500-image upload limit  
 - [ ] On-demand server support  
 - [ ] Minimalist UI  
+- [x] ARR $10k
+- [ ] Target MRR
