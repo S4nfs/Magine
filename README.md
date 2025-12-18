@@ -15,7 +15,7 @@
 - [ ] Target ARR
 - [x] Bishop, Knight, King, Queen, Rook, and Pawn Share
 - [ ] Partner ETFs
-- [ ] 8000OPs with 4PB Bandwidth
+- [ ] 8000OPs 70B200s with 4PB Bandwidth
 - [x] ⭐
 - [ ] 80k Graycubes
 - [ ] 43% efficiency
