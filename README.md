@@ -1,5 +1,5 @@
 # Magine (Private Repo)
-**Fastest / Optimized Inference for Enterprise Use**
+**Fastest cloud Inference for Enterprise Use**
 
 ---
 
