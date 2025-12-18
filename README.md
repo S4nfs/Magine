@@ -14,5 +14,5 @@
 - [x] ARR $10k
 - [ ] Target MRR
 - [x] Bishop, Knight, King, Queen, Rook, and Pawn Share
-- [ ] 
-- [ ] 8000OPs
+- [ ] Partner ETFs
+- [ ] 8000OPs with 4PB Bandwidth
