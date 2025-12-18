@@ -19,3 +19,4 @@
 - [x] ⭐
 - [ ] 80k Graycubes
 - [ ] 43% efficiency
+- [ ] Pawn ventures lead, co-lead by Rook
