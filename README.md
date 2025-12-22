@@ -14,10 +14,11 @@
 - [x] MRR $10k
 - [ ] Target ARR
 - [x] Bishop, Knight, King, Queen, Rook, and Pawn Share
-- [x] Grants Raised
-- [ ] 8000OPs 70B200s with 4PB Bandwidth
+- [x] Grants Raised from CU
+- [ ] 240 clusters, 70B200s with 4PB Bandwidth
 - [x] ⭐
 - [ ] 80k Graycubes
 - [ ] 43% efficiency
 - [ ] Pawn ventures lead, co-lead by Rook
 - [ ] 240 Models support
+- [ ] Papers published
