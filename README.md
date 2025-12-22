@@ -1,4 +1,4 @@
-# Magine (Private Repo)
+# Magine (Platform)
 **Fastest cloud Inference for Enterprise Use**
 
 ---
@@ -14,9 +14,10 @@
 - [x] MRR $10k
 - [ ] Target ARR
 - [x] Bishop, Knight, King, Queen, Rook, and Pawn Share
-- [ ] Partner ETFs
+- [x] Grants Raised
 - [ ] 8000OPs 70B200s with 4PB Bandwidth
 - [x] ⭐
 - [ ] 80k Graycubes
 - [ ] 43% efficiency
 - [ ] Pawn ventures lead, co-lead by Rook
+- [ ] 240 Models support
