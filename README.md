@@ -72,7 +72,7 @@ SDAs are already powering real workloads on providers like [Zeupiter](https://ze
 │  Fetching GitHub data...                            │
 │  Running AI analysis...                             │
 │  ┌───────────────────────────────────────────┐      │
-│  │ ★ Profile Score: 98/100                   │     │
+│  │ ★ Profile Score: 98/100                   │      │
 │  │ 📊 Top Languages: C, Shell, Perl          │      │
 │  │ 🔥 Contribution Streak: 4,021 days        │      │
 │  │ 💡 AI Insight: "The most prolific..."     │      │
@@ -151,15 +151,16 @@ Each user session runs inside a sandboxed browser environment with:
 
 ### Core Commands
 
-| Command          | Description                                                         |
-| ---------------- | ------------------------------------------------------------------- |
-| `<username>`     | Type any GitHub username to generate an embeddable SVG profile card |
-| `analyze <user>` | Deep-dive analysis — score, heatmap, stack breakdown                |
-| `help`           | Show full command list with descriptions                            |
-| `about`          | The story behind Magine                                             |
-| `docs`           | Open the documentation page                                         |
-| `clear`          | Clear terminal output                                               |
-| `exit`           | Close the terminal (mobile)                                         |
+| Command               | Description                                                         |
+| ----------------------| ------------------------------------------------------------------- |
+| `<username>`          | Type any GitHub username to generate an embeddable SVG profile card |
+| `analyze <user>`      | Deep-dive analysis — score, heatmap, stack breakdown                |
+| `help`                | Show full command list with descriptions                            |
+| `about`               | The story behind Magine                                             |
+| `docs`                | Open the documentation page                                         |
+| `clear`               | Clear terminal output                                               |
+| `exit`                | Close the terminal (mobile)                                         |
+| `analyze --refresh`   | refetch (purge profile cache)                                       |
 
 ### Profile Card Customization
 
