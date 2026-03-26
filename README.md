@@ -7,9 +7,8 @@
 **analyze anything. automate everything. from your terminal.**
 
 <br />
-<a href="https://www.producthunt.com/products/magine?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-magine" target="_blank" rel="noopener noreferrer"><img alt="Magine - Spawn vision-enabled AI agents autonomously browsing the web | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1104302&amp;theme=light&amp;t=1774515441812"></a>
-
 <img src="magineAI.png" alt="Magine AI - Terminal-Styled AI Orchestration Platform" width="100%" />
+<a href="https://www.producthunt.com/products/magine?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-magine" target="_blank" rel="noopener noreferrer"><img alt="Magine - Spawn vision-enabled AI agents autonomously browsing the web | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1104302&amp;theme=light&amp;t=1774515441812"></a>
 
 <br />
 
@@ -129,6 +128,7 @@ catbot do "research the best Mumbai street food on Reddit"
 catbot do "send KFC memes on my WhatsApp to Domino's"
 catbot do "check what's happening on my X (Twitter) feed"
 ```
+
 Otherwise create a dedicated agent using the `catbot create` command.
 
 ### ⏰ Smart Scheduling - _iMagine your agents running while you nap_
@@ -167,16 +167,16 @@ Otherwise create a dedicated agent using the `catbot create` command.
 
 ### Core Commands
 
-| Command               | Description                                                         |
-| ----------------------| ------------------------------------------------------------------- |
-| `<username>`          | Type any GitHub username to generate an embeddable SVG profile card |
-| `analyze <user>`      | Deep-dive analysis — score, heatmap, stack breakdown                |
-| `help`                | Show full command list with descriptions                            |
-| `about`               | The story behind Magine                                             |
-| `docs`                | Open the documentation page                                         |
-| `clear`               | Clear terminal output                                               |
-| `exit`                | Close the terminal (mobile)                                         |
-| `analyze --refresh`   | refetch (purge profile cache)                                       |
+| Command             | Description                                                         |
+| ------------------- | ------------------------------------------------------------------- |
+| `<username>`        | Type any GitHub username to generate an embeddable SVG profile card |
+| `analyze <user>`    | Deep-dive analysis — score, heatmap, stack breakdown                |
+| `help`              | Show full command list with descriptions                            |
+| `about`             | The story behind Magine                                             |
+| `docs`              | Open the documentation page                                         |
+| `clear`             | Clear terminal output                                               |
+| `exit`              | Close the terminal (mobile)                                         |
+| `analyze --refresh` | refetch (purge profile cache)                                       |
 
 ### Profile Card Customization
 
@@ -206,28 +206,30 @@ Otherwise create a dedicated agent using the `catbot create` command.
 
 ### AI Browser Agents (CatBot)
 
-| Command                                 | Description                                    |
-| --------------------------------------- | ---------------------------------------------- |
-| `catbot create <prompt>`                | Create a new AI browser agent                  |
-| `catbot create sda <prompt>`            | Create a vision-enabled SDA agent              |
-| `catbot list`                           | List all your agents with status               |
-| `catbot task <id\|name> <task>`         | Assign a natural language task to an agent     |
-| `catbot run <id\|name>`                 | Run a CatBot (agent or SDA)                    |
-| `catbot do <prompt>`                    | Quick one-off browser task (shared session)    |
-| `catbot schedule <id\|name> <schedule>` | Set a recurring schedule (NL, preset, or cron) |
-| `catbot delete <id\|name>`              | Permanently remove an agent                    |
-| `catbot mode <id\|name>`                | Switch CatBot mode (agent / SDA)               |
-| `catbot prompt <id\|name>`              | Set or change agent task prompt                |
-| `catbot memory`                         | View saved browsing memories                   |
-| `catbot memory delete <site>`           | Delete memory for a specific site              |
-| `catbot memory clear`                   | Clear ALL agent memories                       |
-| `catbot logs`                           | View CatBot activity logs                      |
-| `catbot stats`                          | View CatBot statistics                         |
-| `catbot mood`                           | Check CatBot mood & state                      |
-| `catbot treat`                          | Reward CatBot (positive feedback)              |
-| `catbot scold`                          | Correct CatBot (negative feedback)             |
-| `catbot linkedin`                       | Link LinkedIn browser session                  |
-| `catbot email`                          | Check GitHub email extraction                  |
+| Command                                 | Description                                      |
+| --------------------------------------- | ------------------------------------------------ |
+| `catbot create <prompt>`                | Create a new AI browser agent                    |
+| `catbot create sda <prompt>`            | Create a vision-enabled SDA agent                |
+| `catbot list`                           | List all your agents with status                 |
+| `catbot task <id\|name> <task>`         | Assign a natural language task to an agent       |
+| `catbot run <id\|name>`                 | Run a CatBot (agent or SDA)                      |
+| `catbot do <prompt>`                    | Quick one-off browser task (always starts fresh) |
+| `catbot continue`                       | Resume a previously paused quick task            |
+| `catbot do stop`                        | Cancel a running quick task                      |
+| `catbot schedule <id\|name> <schedule>` | Set a recurring schedule (NL, preset, or cron)   |
+| `catbot delete <id\|name>`              | Permanently remove an agent                      |
+| `catbot mode <id\|name>`                | Switch CatBot mode (agent / SDA)                 |
+| `catbot prompt <id\|name>`              | Set or change agent task prompt                  |
+| `catbot memory`                         | View saved browsing memories                     |
+| `catbot memory delete <site>`           | Delete memory for a specific site                |
+| `catbot memory clear`                   | Clear ALL agent memories                         |
+| `catbot logs`                           | View CatBot activity logs                        |
+| `catbot stats`                          | View CatBot statistics                           |
+| `catbot mood`                           | Check CatBot mood & state                        |
+| `catbot treat`                          | Reward CatBot (positive feedback)                |
+| `catbot scold`                          | Correct CatBot (negative feedback)               |
+| `catbot linkedin`                       | Link LinkedIn browser session                    |
+| `catbot email`                          | Check GitHub email extraction                    |
 
 ### LinkedIn SDAs
 
