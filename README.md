@@ -7,6 +7,7 @@
 **analyze anything. automate everything. from your terminal.**
 
 <br />
+<a href="https://www.producthunt.com/products/magine?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-magine" target="_blank" rel="noopener noreferrer"><img alt="Magine - Spawn vision-enabled AI agents autonomously browsing the web | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1104302&amp;theme=light&amp;t=1774515441812"></a>
 
 <img src="magineAI.png" alt="Magine AI - Terminal-Styled AI Orchestration Platform" width="100%" />
 
@@ -114,6 +115,21 @@ Each user session runs inside a sandboxed browser environment with:
 - **Multi-site support** - Gmail, LinkedIn, YouTube, and any website
 - **Credential management** - secure prompt-based auth when agents need to log in
 - **Frame-by-frame replay** - review every step your agent took with thumbnail navigation
+
+**Quick Tasks - just tell CatBot what to do:**
+
+```bash
+catbot do "check NVIDIA stock price on Yahoo Finance"
+catbot do "order Sony WH-1000XM5 headphones from Amazon and pay using my card"
+catbot do "send an email on Gmail to Arthur about yesterday's meeting"
+catbot do "search arXiv for latest transformer-based LLM papers from 2026"
+catbot do "whats the latest Veritasium video is all about on youtube"
+catbot do "apply to senior frontend developer jobs on Indeed"
+catbot do "research the best Mumbai street food on Reddit"
+catbot do "send KFC memes on my WhatsApp to Domino's"
+catbot do "check what's happening on my X (Twitter) feed"
+```
+Otherwise create a dedicated agent using the `catbot create` command.
 
 ### ⏰ Smart Scheduling - _iMagine your agents running while you nap_
 
