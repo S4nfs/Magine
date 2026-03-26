@@ -231,7 +231,7 @@ Otherwise create a dedicated agent using the `catbot create` command.
 | `catbot linkedin`                       | Link LinkedIn browser session                    |
 | `catbot email`                          | Check GitHub email extraction                    |
 
-### LinkedIn SDAs
+### LinkedIn SDAs (Deprecating Soon - Use `catbot` instead)
 
 | Command                           | Description                     |
 | --------------------------------- | ------------------------------- |
