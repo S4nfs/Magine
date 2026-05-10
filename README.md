@@ -136,8 +136,39 @@ Otherwise create a dedicated agent using the `catbot create` command.
 - **Natural language scheduling** - say _"every weekday at 9am"_ instead of writing cron expressions
 - **AI cron parser** - LLM-powered conversion of human language to precise cron schedules
 - **Preset schedules** - quick options: hourly, daily, twice daily, weekdays, every 6h/12h
-- **Heartbeat mode** - watch for changes on any page and get notified
+- **Heartbeat mode** - reactive, event-driven watchers that fire the moment a page changes (see below)
 - **Timezone-aware** - schedules respect your local timezone
+
+### 🐾 Heartbeat Agents - _iMagine an agent that wakes up only when something happens_
+
+Heartbeat agents are **reactive**, not scheduled. The agent injects a tiny page-side `MutationObserver` + `fetch` / `XHR` hook into the watched page and reacts within ~2 seconds of any real DOM mutation or network response — not on a fixed timer. Only when a real change is detected does the full agent (with your action prompt) wake up and burn regular agent tokens. The `every <sec>` window is a **safety-net ceiling** for changes the observer can't see (canvas / cross-origin iframes / video), not the primary trigger.
+
+**One-shot create** (recommended):
+
+```bash
+# Minimal — every and url are OPTIONAL
+catbot create heartbeat \
+  watch "new unread email" \
+  do "summarise it in 2 lines and reply 'on it' if it asks a question"
+
+# With url (recommended) and a custom safety-net interval
+catbot create heartbeat \
+  watch "new unread email at the top of the inbox" \
+  do "open the newest unread email, summarise it in 2 lines, and reply 'on it' if it asks a question" \
+  every 60 \
+  url https://mail.google.com/
+```
+
+- **Cost**: 2 🐱 (vs 1 🐱 for a regular agent) — keeps a browser tab + LLM micro-loop alive continuously.
+- **Mutation-driven**: a `MutationObserver` + `fetch`/`XHR` hook is injected into the watched page on first load. The manager polls `window.__magineHbPulseAt` every ~2s (no LLM, no screenshot — free) and only runs the full vision micro-prompt when the page has actually mutated.
+- **`every <sec>` is OPTIONAL** — default 60s, used only as a _forced ceiling_ for full checks so observer-bypassing changes (canvas, video, cross-origin iframes) don't go unnoticed. The agent fires faster than this when real mutations happen.
+- **`url <url>` is OPTIONAL** but recommended — if set, the watcher self-heals back to that page if the tab drifts (so it doesn't sit on `about:blank` forever).
+- **Quoted clauses are required**: `watch` and `do` must be quoted strings. Bare text is rejected so typos like `do every 20 seconds` can't silently capture the timer as the action.
+- **Chase mode**: after a real change, the next several ticks run at the minimum interval to catch follow-up changes that tend to cluster (e.g. multi-stage notifications).
+- **Coalescing**: if three changes happen during one running action, you get **one** wake-up that handles all three — not three separate runs.
+- **Backoff**: transient errors back off on `[30s, 1min, 5min, 15min, 60min]` so a flaky page can't drain your wallet.
+
+Use it for inboxes, dashboards, notification feeds, queue UIs, status pages, ticket boards — anything where the right moment to act is "whenever something new shows up" rather than "every hour, just in case."
 
 ### 🎨 Terminal Experience - _iMagine your perfect terminal aesthetic_
 
@@ -161,6 +192,15 @@ Otherwise create a dedicated agent using the `catbot create` command.
 - **QR Login** - scan a QR code from your phone to log in on desktop
 - **Session management** - secure token-based sessions
 
+### 🌐 Browser Session Import - _iMagine your CatBot is already logged in_
+
+- **Magine Bridge extension** (Chrome/Edge/Brave) + tiny native messaging host
+- **Per-domain consent** - you pick each site to sync, one at a time
+- **Single-use pairing codes** that expire in 60 seconds
+- **AES-256-GCM encryption** at rest, 7-day TTL auto-expiry
+- **Cascade revoke** - `browser unlink` deletes every session for that profile
+- **Full audit trail** - admins see who imported what, when, and from which browser
+
 ---
 
 ## Terminal Commands
@@ -182,10 +222,10 @@ Otherwise create a dedicated agent using the `catbot create` command.
 
 | Command         | Description                                                          |
 | --------------- | -------------------------------------------------------------------- |
-| `theme`         | Change card theme (20+ presets)                                      |
+| `theme`         | Change card theme (30 presets)                                       |
 | `customize`     | Customize card colors (bg, text, accent)                             |
 | `social`        | Add social media links to your card                                  |
-| `bio`           | Set your job title and bio                                           |
+| `bio`           | Set your job title and bio (supports `[text](url)` markdown links)   |
 | `preview`       | Preview current card settings                                        |
 | `preview <opt>` | Toggle card sections: `ai`, `activity`, `deep`, `social`, `devworth` |
 
@@ -206,30 +246,45 @@ Otherwise create a dedicated agent using the `catbot create` command.
 
 ### AI Browser Agents (CatBot)
 
-| Command                                 | Description                                      |
-| --------------------------------------- | ------------------------------------------------ |
-| `catbot create <prompt>`                | Create a new AI browser agent                    |
-| `catbot create sda <prompt>`            | Create a vision-enabled SDA agent                |
-| `catbot list`                           | List all your agents with status                 |
-| `catbot task <id\|name> <task>`         | Assign a natural language task to an agent       |
-| `catbot run <id\|name>`                 | Run a CatBot (agent or SDA)                      |
-| `catbot do <prompt>`                    | Quick one-off browser task (always starts fresh) |
-| `catbot continue`                       | Resume a previously paused quick task            |
-| `catbot do stop`                        | Cancel a running quick task                      |
-| `catbot schedule <id\|name> <schedule>` | Set a recurring schedule (NL, preset, or cron)   |
-| `catbot delete <id\|name>`              | Permanently remove an agent                      |
-| `catbot mode <id\|name>`                | Switch CatBot mode (agent / SDA)                 |
-| `catbot prompt <id\|name>`              | Set or change agent task prompt                  |
-| `catbot memory`                         | View saved browsing memories                     |
-| `catbot memory delete <site>`           | Delete memory for a specific site                |
-| `catbot memory clear`                   | Clear ALL agent memories                         |
-| `catbot logs`                           | View CatBot activity logs                        |
-| `catbot stats`                          | View CatBot statistics                           |
-| `catbot mood`                           | Check CatBot mood & state                        |
-| `catbot treat`                          | Reward CatBot (positive feedback)                |
-| `catbot scold`                          | Correct CatBot (negative feedback)               |
-| `catbot linkedin`                       | Link LinkedIn browser session                    |
-| `catbot email`                          | Check GitHub email extraction                    |
+| Command                                                                  | Description                                                            |
+| ------------------------------------------------------------------------ | ---------------------------------------------------------------------- |
+| `catbot create <prompt>`                                                 | Create a new AI browser agent (1 🐱)                                   |
+| `catbot create sda <prompt>`                                             | Create a vision-enabled SDA agent (1 🐱)                               |
+| `catbot create heartbeat watch "<w>" do "<a>" [every <s>] [url <u>]`     | Create a reactive heartbeat agent (2 🐱, manual play to start)         |
+| `catbot list`                                                            | List all your agents with status                                       |
+| `catbot task <id\|name> <task>`                                          | Assign a natural language task to an agent                             |
+| `catbot run <id\|name>`                                                  | Run a CatBot (agent or SDA)                                            |
+| `catbot do <prompt>`                                                     | Quick one-off browser task (always starts fresh)                       |
+| `catbot continue`                                                        | Resume a previously paused quick task                                  |
+| `catbot do stop`                                                         | Cancel a running quick task                                            |
+| `catbot schedule <id\|name> <schedule>`                                  | Set a recurring schedule (NL, preset, or cron)                         |
+| `catbot heartbeat <id\|name> watch "<w>" do "<a>" [every <s>] [url <u>]` | Convert an existing bot to a reactive heartbeat (manual play to start) |
+| `catbot heartbeat <id\|name>`                                            | Show current heartbeat config                                          |
+| `catbot heartbeat <id\|name> off`                                        | Disable heartbeat (revert to agent mode)                               |
+| `catbot delete <id\|name>`                                               | Permanently remove an agent                                            |
+| `catbot rename <id\|name> <new>`                                         | Rename a CatBot (also re-routes `@<name>` tags)                        |
+| `catbot mode <id\|name>`                                                 | Switch CatBot mode (agent / SDA)                                       |
+| `catbot prompt <id\|name>`                                               | Set or change agent task prompt                                        |
+| `catbot memory`                                                          | View saved browsing memories                                           |
+| `catbot memory delete <site>`                                            | Delete memory for a specific site                                      |
+| `catbot memory clear`                                                    | Clear ALL agent memories                                               |
+| `catbot logs`                                                            | View CatBot activity logs                                              |
+| `catbot stats`                                                           | View CatBot statistics                                                 |
+| `catbot mood`                                                            | Check CatBot mood & state                                              |
+| `catbot treat`                                                           | Reward CatBot (positive feedback)                                      |
+| `catbot scold`                                                           | Correct CatBot (negative feedback)                                     |
+| `catbot linkedin`                                                        | Link LinkedIn browser session                                          |
+| `catbot email`                                                           | Check GitHub email extraction                                          |
+
+### Browser Session Import (Magine Bridge)
+
+| Command                      | Description                                                  |
+| ---------------------------- | ------------------------------------------------------------ |
+| `browser`                    | Help & overview of the bridge                                |
+| `browser install`            | Show extension + native-host installer URLs                  |
+| `browser link`               | Get a 60-second pairing code for the extension popup         |
+| `browser status`             | List your linked browser profiles + synced domains           |
+| `browser unlink <profileId>` | Revoke a profile (cascade-deletes all its imported sessions) |
 
 ### LinkedIn SDAs (Deprecating Soon - Use `catbot` instead)
 
@@ -382,6 +437,81 @@ Webhook deliveries include an `X-Magine-Signature` header (HMAC-SHA256) for veri
 
 **n8n Integration**: Use a Webhook node (push) or HTTP Request node to POST to `/api/catbots` (pull).
 
+### Spawn-Agent (Experimental)
+
+Agents can spawn other agents — both internally (when one agent's prompt
+references `@another-agent` it will be invoked at run-time) and externally
+through the spawn webhook. Each spawned run records a directed edge in
+the **civilization graph** so you can see who calls whom and how
+reliably each agent serves its callers.
+
+```bash
+curl -X POST https://magine.cloud/api/catbot/spawn \
+  -H "Content-Type: application/json" \
+  -d '{
+    "sessionToken": "<your-session-token>",
+    "targetBotName": "data-extractor",
+    "prompt": "Pull the latest order list",
+    "args": { "since": "2025-01-01", "format": "csv" }
+  }'
+```
+
+You can also pass arguments inline using a CLI-style `--key=value` syntax
+in the prompt itself:
+
+```text
+@data-extractor pull orders --since=2025-01-01 --format=csv
+```
+
+Inline args override structured `args` body fields. Quoted values are
+supported: `--label="last quarter"`.
+
+### File / Image Tagging in Prompts
+
+Reference any file you've previously uploaded to an agent by name with
+the `#` tag — Magine auto-attaches it to the run:
+
+```text
+Summarise the contents of #report.pdf and compare it to #last-week.csv
+```
+
+Small text files (≤32 KB) are inlined directly; larger files and images
+are passed by reference so the vision/code paths can fetch them without
+inflating prompts.
+
+**How uploads behave:**
+
+- **Persistent across runs** — every file you attach is saved and stays
+  available to the same agent's future runs (and shows up in `#`
+  autocomplete) until you delete it or it expires.
+- **Per-bot quota** — each agent keeps the most recent ~100 MB of
+  attachments; older files roll off automatically when that cap is hit.
+- **30-day auto-cleanup** — uploads older than 30 days are reaped by
+  the garbage collector even if you're still using the bot. Re-attach
+  anything you want to keep around longer.
+- **Deleted files vanish from `#` suggestions** — once a file is gone
+  (manual delete, expiry, or bot deletion), it stops appearing in the
+  autocomplete dropdown. Stale `#filename` references in old prompts
+  are silently ignored at run-time instead of erroring out.
+- **Cascade delete** — deleting a bot wipes every file attached to it.
+  Closing your account wipes every upload across every bot.
+- **Private to you** — uploads are scoped to your user id; no other
+  account can see or reference them, even by guessing the filename.
+
+### Neurons View
+
+Open the 🧠 **Neurons** button on the home page to see the civilization
+graph — every directed call between your agents, weighted by an EWMA-
+based trust score (`success_rate × log10(call_count+10)`). Edge colour
+encodes recent reliability: green ≥ 70%, amber 40–70%, red < 40%.
+
+Each agent tile shows a **live status dot** (pulsing green when the
+agent is currently running, grey when idle) and a ⏱ glyph for agents
+with an active schedule or heartbeat. With nothing selected, the canvas
+shows an aggregate strip — total agents, how many are active right now,
+how many are scheduled, total runs, and the success / failure split —
+so you can size up your whole agent fleet at a glance.
+
 ---
 
 ## Security & Privacy
@@ -390,6 +520,10 @@ Webhook deliveries include an `X-Magine-Signature` header (HMAC-SHA256) for veri
 - **Browser sessions** runs in an isolated cloud sandboxed containers with automatic TTL cleanup
 - **Agent credentials** are held in memory only during execution and never persisted to disk
 - **Session tokens** are cryptographically random with TTL-based expiration
+- **Auto-cleanup** — screenshots, agent logs, and uploaded files are
+  garbage-collected on rolling retention windows (default 7–30 days,
+  admin-configurable). Deleting a bot or your account cascade-deletes
+  every file, screenshot, memory, and credential tied to it.
 - **We do not sell or share your data** - ever
 
 ---
