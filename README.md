@@ -8,8 +8,10 @@
 
 <br />
 <img src="magineAI.png" alt="Magine AI - Terminal-Styled AI Orchestration Platform" width="100%" />
-<a href="https://www.producthunt.com/products/magine?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-magine" target="_blank" rel="noopener noreferrer"><img alt="Magine - Spawn vision-enabled AI agents autonomously browsing the web | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1104302&amp;theme=light&amp;t=1774515441812"></a>
-
+<br />
+<a href="https://chromewebstore.google.com/detail/magine-bridge/nbnppnlaacbhaknaikpkljfdjfelbbee" target="_blank"><img alt="Available in the Chrome Web Store" height="54" src="https://magine.cloud/badges/chrome.png"></a>&nbsp;
+<a href="https://www.producthunt.com/products/magine?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-magine" target="_blank" rel="noopener noreferrer"><img alt="Magine - Spawn vision-enabled AI agents autonomously browsing the web | Product Hunt" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1104302&amp;theme=light&amp;t=1774515441812"></a>&nbsp;
+<a href="https://addons.mozilla.org/en-US/firefox/addon/magine-bridge" target="_blank"><img alt="Get the Add-on for Firefox" height="54" src="https://magine.cloud/badges/firefox.svg"></a>
 <br />
 
 [Live Demo](https://magine.cloud) · [Docs](https://magine.cloud/docs) · [Features](#features) · [Story](#the-story-of-magine) · [Commands](#terminal-commands) · [Agents](#ai-browser-agents) · [Pricing](#pricing)
@@ -141,12 +143,12 @@ Otherwise create a dedicated agent using the `catbot create` command.
 
 ### 🐾 Heartbeat Agents - _iMagine an agent that wakes up only when something happens_
 
-Heartbeat agents are **reactive**, not scheduled. The agent injects a tiny page-side `MutationObserver` + `fetch` / `XHR` hook into the watched page and reacts within ~2 seconds of any real DOM mutation or network response — not on a fixed timer. Only when a real change is detected does the full agent (with your action prompt) wake up and burn regular agent tokens. The `every <sec>` window is a **safety-net ceiling** for changes the observer can't see (canvas / cross-origin iframes / video), not the primary trigger.
+Heartbeat agents are **reactive**, not scheduled. The agent injects a tiny page-side `MutationObserver` + `fetch` / `XHR` hook into the watched page and reacts within ~2 seconds of any real DOM mutation or network response - not on a fixed timer. Only when a real change is detected does the full agent (with your action prompt) wake up and burn regular agent tokens. The `every <n>[s|m|h]` window is a **safety-net ceiling** for changes the observer can't see (canvas / cross-origin iframes / video), not the primary trigger.
 
 **One-shot create** (recommended):
 
 ```bash
-# Minimal — every and url are OPTIONAL
+# Minimal - every and url are OPTIONAL
 catbot create heartbeat \
   watch "new unread email" \
   do "summarise it in 2 lines and reply 'on it' if it asks a question"
@@ -155,20 +157,22 @@ catbot create heartbeat \
 catbot create heartbeat \
   watch "new unread email at the top of the inbox" \
   do "open the newest unread email, summarise it in 2 lines, and reply 'on it' if it asks a question" \
-  every 60 \
+  every 60s \
   url https://mail.google.com/
 ```
 
-- **Cost**: 2 🐱 (vs 1 🐱 for a regular agent) — keeps a browser tab + LLM micro-loop alive continuously.
-- **Mutation-driven**: a `MutationObserver` + `fetch`/`XHR` hook is injected into the watched page on first load. The manager polls `window.__magineHbPulseAt` every ~2s (no LLM, no screenshot — free) and only runs the full vision micro-prompt when the page has actually mutated.
-- **`every <sec>` is OPTIONAL** — default 60s, used only as a _forced ceiling_ for full checks so observer-bypassing changes (canvas, video, cross-origin iframes) don't go unnoticed. The agent fires faster than this when real mutations happen.
-- **`url <url>` is OPTIONAL** but recommended — if set, the watcher self-heals back to that page if the tab drifts (so it doesn't sit on `about:blank` forever).
+> **Units**: `every <n>s` (seconds), `every <n>m` (minutes), `every <n>h` (hours), or a bracketed natural form like `every [5 minutes]`. A bare number is treated as seconds. Range: 10s–5m.
+
+- **Cost**: 2 🐱 (vs 1 🐱 for a regular agent) - keeps a browser tab + LLM micro-loop alive continuously.
+- **Mutation-driven**: a `MutationObserver` + `fetch`/`XHR` hook is injected into the watched page on first load. The manager polls `window.__magineHbPulseAt` every ~2s (no LLM, no screenshot - free) and only runs the full vision micro-prompt when the page has actually mutated.
+- **`every <n>[s|m|h]` is OPTIONAL** - default 60s, used only as a _forced ceiling_ for full checks so observer-bypassing changes (canvas, video, cross-origin iframes) don't go unnoticed. The agent fires faster than this when real mutations happen.
+- **`url <url>` is OPTIONAL** but recommended - if set, the watcher self-heals back to that page if the tab drifts (so it doesn't sit on `about:blank` forever).
 - **Quoted clauses are required**: `watch` and `do` must be quoted strings. Bare text is rejected so typos like `do every 20 seconds` can't silently capture the timer as the action.
 - **Chase mode**: after a real change, the next several ticks run at the minimum interval to catch follow-up changes that tend to cluster (e.g. multi-stage notifications).
-- **Coalescing**: if three changes happen during one running action, you get **one** wake-up that handles all three — not three separate runs.
+- **Coalescing**: if three changes happen during one running action, you get **one** wake-up that handles all three - not three separate runs.
 - **Backoff**: transient errors back off on `[30s, 1min, 5min, 15min, 60min]` so a flaky page can't drain your wallet.
 
-Use it for inboxes, dashboards, notification feeds, queue UIs, status pages, ticket boards — anything where the right moment to act is "whenever something new shows up" rather than "every hour, just in case."
+Use it for inboxes, dashboards, notification feeds, queue UIs, status pages, ticket boards - anything where the right moment to act is "whenever something new shows up" rather than "every hour, just in case."
 
 ### 🎨 Terminal Experience - _iMagine your perfect terminal aesthetic_
 
@@ -194,6 +198,12 @@ Use it for inboxes, dashboards, notification feeds, queue UIs, status pages, tic
 
 ### 🌐 Browser Session Import - _iMagine your CatBot is already logged in_
 
+<p align="left">
+  <a href="https://chromewebstore.google.com/detail/magine-bridge/nbnppnlaacbhaknaikpkljfdjfelbbee" target="_blank"><img src="https://magine.cloud/badges/chrome.png" alt="Available in the Chrome Web Store" height="40" /></a>
+  &nbsp;&nbsp;
+  <a href="https://addons.mozilla.org/en-US/firefox/addon/magine-bridge" target="_blank"><img src="https://magine.cloud/badges/firefox.svg" alt="Get the Add-on for Firefox" height="40" /></a>
+</p>
+
 - **Magine Bridge extension** (Chrome/Edge/Brave) + tiny native messaging host
 - **Per-domain consent** - you pick each site to sync, one at a time
 - **Single-use pairing codes** that expire in 60 seconds
@@ -210,7 +220,7 @@ Use it for inboxes, dashboards, notification feeds, queue UIs, status pages, tic
 | Command             | Description                                                         |
 | ------------------- | ------------------------------------------------------------------- |
 | `<username>`        | Type any GitHub username to generate an embeddable SVG profile card |
-| `analyze <user>`    | Deep-dive analysis — score, heatmap, stack breakdown                |
+| `analyze <user>`    | Deep-dive analysis - score, heatmap, stack breakdown                |
 | `help`              | Show full command list with descriptions                            |
 | `about`             | The story behind Magine                                             |
 | `docs`              | Open the documentation page                                         |
@@ -246,35 +256,35 @@ Use it for inboxes, dashboards, notification feeds, queue UIs, status pages, tic
 
 ### AI Browser Agents (CatBot)
 
-| Command                                                                  | Description                                                            |
-| ------------------------------------------------------------------------ | ---------------------------------------------------------------------- |
-| `catbot create <prompt>`                                                 | Create a new AI browser agent (1 🐱)                                   |
-| `catbot create sda <prompt>`                                             | Create a vision-enabled SDA agent (1 🐱)                               |
-| `catbot create heartbeat watch "<w>" do "<a>" [every <s>] [url <u>]`     | Create a reactive heartbeat agent (2 🐱, manual play to start)         |
-| `catbot list`                                                            | List all your agents with status                                       |
-| `catbot task <id\|name> <task>`                                          | Assign a natural language task to an agent                             |
-| `catbot run <id\|name>`                                                  | Run a CatBot (agent or SDA)                                            |
-| `catbot do <prompt>`                                                     | Quick one-off browser task (always starts fresh)                       |
-| `catbot continue`                                                        | Resume a previously paused quick task                                  |
-| `catbot do stop`                                                         | Cancel a running quick task                                            |
-| `catbot schedule <id\|name> <schedule>`                                  | Set a recurring schedule (NL, preset, or cron)                         |
-| `catbot heartbeat <id\|name> watch "<w>" do "<a>" [every <s>] [url <u>]` | Convert an existing bot to a reactive heartbeat (manual play to start) |
-| `catbot heartbeat <id\|name>`                                            | Show current heartbeat config                                          |
-| `catbot heartbeat <id\|name> off`                                        | Disable heartbeat (revert to agent mode)                               |
-| `catbot delete <id\|name>`                                               | Permanently remove an agent                                            |
-| `catbot rename <id\|name> <new>`                                         | Rename a CatBot (also re-routes `@<name>` tags)                        |
-| `catbot mode <id\|name>`                                                 | Switch CatBot mode (agent / SDA)                                       |
-| `catbot prompt <id\|name>`                                               | Set or change agent task prompt                                        |
-| `catbot memory`                                                          | View saved browsing memories                                           |
-| `catbot memory delete <site>`                                            | Delete memory for a specific site                                      |
-| `catbot memory clear`                                                    | Clear ALL agent memories                                               |
-| `catbot logs`                                                            | View CatBot activity logs                                              |
-| `catbot stats`                                                           | View CatBot statistics                                                 |
-| `catbot mood`                                                            | Check CatBot mood & state                                              |
-| `catbot treat`                                                           | Reward CatBot (positive feedback)                                      |
-| `catbot scold`                                                           | Correct CatBot (negative feedback)                                     |
-| `catbot linkedin`                                                        | Link LinkedIn browser session                                          |
-| `catbot email`                                                           | Check GitHub email extraction                                          |
+| Command                                                                         | Description                                                            |
+| ------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `catbot create <prompt>`                                                        | Create a new AI browser agent (1 🐱)                                   |
+| `catbot create sda <prompt>`                                                    | Create a vision-enabled SDA agent (1 🐱)                               |
+| `catbot create heartbeat watch "<w>" do "<a>" [every <n>[s|m|h]] [url <u>]`     | Create a reactive heartbeat agent (2 🐱, manual play to start)         |
+| `catbot list`                                                                   | List all your agents with status                                       |
+| `catbot task <id\|name> <task>`                                                 | Assign a natural language task to an agent                             |
+| `catbot run <id\|name>`                                                         | Run a CatBot (agent or SDA)                                            |
+| `catbot do <prompt>`                                                            | Quick one-off browser task (always starts fresh)                       |
+| `catbot continue`                                                               | Resume a previously paused quick task                                  |
+| `catbot do stop`                                                                | Cancel a running quick task                                            |
+| `catbot schedule <id\|name> <schedule>`                                         | Set a recurring schedule (NL, preset, or cron)                         |
+| `catbot heartbeat <id\|name> watch "<w>" do "<a>" [every <n>[s|m|h]] [url <u>]` | Convert an existing bot to a reactive heartbeat (manual play to start) |
+| `catbot heartbeat <id\|name>`                                                   | Show current heartbeat config                                          |
+| `catbot heartbeat <id\|name> off`                                               | Disable heartbeat (revert to agent mode)                               |
+| `catbot delete <id\|name>`                                                      | Permanently remove an agent                                            |
+| `catbot rename <id\|name> <new>`                                                | Rename a CatBot (also re-routes `@<name>` tags)                        |
+| `catbot mode <id\|name>`                                                        | Switch CatBot mode (agent / SDA)                                       |
+| `catbot prompt <id\|name>`                                                      | Set or change agent task prompt                                        |
+| `catbot memory`                                                                 | View saved browsing memories                                           |
+| `catbot memory delete <site>`                                                   | Delete memory for a specific site                                      |
+| `catbot memory clear`                                                           | Clear ALL agent memories                                               |
+| `catbot logs`                                                                   | View CatBot activity logs                                              |
+| `catbot stats`                                                                  | View CatBot statistics                                                 |
+| `catbot mood`                                                                   | Check CatBot mood & state                                              |
+| `catbot treat`                                                                  | Reward CatBot (positive feedback)                                      |
+| `catbot scold`                                                                  | Correct CatBot (negative feedback)                                     |
+| `catbot linkedin`                                                               | Link LinkedIn browser session                                          |
+| `catbot email`                                                                  | Check GitHub email extraction                                          |
 
 ### Browser Session Import (Magine Bridge)
 
@@ -286,28 +296,26 @@ Use it for inboxes, dashboards, notification feeds, queue UIs, status pages, tic
 | `browser status`             | List your linked browser profiles + synced domains           |
 | `browser unlink <profileId>` | Revoke a profile (cascade-deletes all its imported sessions) |
 
-### LinkedIn SDAs (Deprecating Soon - Use `catbot` instead)
+### LinkedIn (handled by catbot agents)
 
-| Command                           | Description                     |
-| --------------------------------- | ------------------------------- |
-| `linkedin login`                  | Open browser for LinkedIn login |
-| `linkedin status`                 | Check session status            |
-| `linkedin profile <url>`          | Get a person's profile          |
-| `linkedin company <name>`         | Get a company's profile         |
-| `linkedin jobs <query>`           | Search for jobs                 |
-| `linkedin job <url>`              | Get job details                 |
-| `linkedin apply <url>`            | Apply to a job (Easy Apply)     |
-| `linkedin people <query>`         | Search for people               |
-| `linkedin post <text>`            | Create a LinkedIn post          |
-| `linkedin article <text>`         | Create a LinkedIn article       |
-| `linkedin follow <url>`           | Follow a person                 |
-| `linkedin connect <url>`          | Send a connection request       |
-| `linkedin block <url>`            | Block a person                  |
-| `linkedin bulk-follow <keyword>`  | Auto-follow people by keyword   |
-| `linkedin bulk-connect <keyword>` | Auto-connect people by keyword  |
-| `linkedin tools`                  | List all available SDA tools    |
-| `linkedin close`                  | Close browser session           |
-| `linkedin clear`                  | Close ALL browser sessions      |
+Magine no longer ships a separate LinkedIn MCP. Anything you used to do with
+`linkedin <command>` is now driven by catbot agents - they navigate the
+LinkedIn UI directly with the same anti-bot stack used for every other site,
+so logins, profile/company lookups, job search & apply, post/article
+creation, follow/connect/block, and bulk-actions are all just natural-language
+prompts:
+
+```
+catbot do log into LinkedIn and check my notifications
+catbot do search LinkedIn for "senior backend engineer" jobs in Berlin and save the top 10
+catbot do post on LinkedIn: "Shipping Magine v1.2.4 - neurons graph, catnips, and faster agent screens."
+catbot do connect with the first 5 people on LinkedIn who match "founding engineer"
+```
+
+The agent reuses the per-user browser profile, so a single LinkedIn login
+persists across runs. The legacy `linkedin <command>` dispatcher is still
+accepted for backwards compatibility but is no longer documented or
+autocompleted, and will be removed in a future release.
 
 ### Webhooks & API
 
@@ -439,7 +447,7 @@ Webhook deliveries include an `X-Magine-Signature` header (HMAC-SHA256) for veri
 
 ### Spawn-Agent (Experimental)
 
-Agents can spawn other agents — both internally (when one agent's prompt
+Agents can spawn other agents - both internally (when one agent's prompt
 references `@another-agent` it will be invoked at run-time) and externally
 through the spawn webhook. Each spawned run records a directed edge in
 the **civilization graph** so you can see who calls whom and how
@@ -469,7 +477,7 @@ supported: `--label="last quarter"`.
 ### File / Image Tagging in Prompts
 
 Reference any file you've previously uploaded to an agent by name with
-the `#` tag — Magine auto-attaches it to the run:
+the `#` tag - Magine auto-attaches it to the run:
 
 ```text
 Summarise the contents of #report.pdf and compare it to #last-week.csv
@@ -481,35 +489,35 @@ inflating prompts.
 
 **How uploads behave:**
 
-- **Persistent across runs** — every file you attach is saved and stays
+- **Persistent across runs** - every file you attach is saved and stays
   available to the same agent's future runs (and shows up in `#`
   autocomplete) until you delete it or it expires.
-- **Per-bot quota** — each agent keeps the most recent ~100 MB of
+- **Per-bot quota** - each agent keeps the most recent ~100 MB of
   attachments; older files roll off automatically when that cap is hit.
-- **30-day auto-cleanup** — uploads older than 30 days are reaped by
+- **30-day auto-cleanup** - uploads older than 30 days are reaped by
   the garbage collector even if you're still using the bot. Re-attach
   anything you want to keep around longer.
-- **Deleted files vanish from `#` suggestions** — once a file is gone
+- **Deleted files vanish from `#` suggestions** - once a file is gone
   (manual delete, expiry, or bot deletion), it stops appearing in the
   autocomplete dropdown. Stale `#filename` references in old prompts
   are silently ignored at run-time instead of erroring out.
-- **Cascade delete** — deleting a bot wipes every file attached to it.
+- **Cascade delete** - deleting a bot wipes every file attached to it.
   Closing your account wipes every upload across every bot.
-- **Private to you** — uploads are scoped to your user id; no other
+- **Private to you** - uploads are scoped to your user id; no other
   account can see or reference them, even by guessing the filename.
 
 ### Neurons View
 
 Open the 🧠 **Neurons** button on the home page to see the civilization
-graph — every directed call between your agents, weighted by an EWMA-
+graph - every directed call between your agents, weighted by an EWMA-
 based trust score (`success_rate × log10(call_count+10)`). Edge colour
 encodes recent reliability: green ≥ 70%, amber 40–70%, red < 40%.
 
 Each agent tile shows a **live status dot** (pulsing green when the
 agent is currently running, grey when idle) and a ⏱ glyph for agents
 with an active schedule or heartbeat. With nothing selected, the canvas
-shows an aggregate strip — total agents, how many are active right now,
-how many are scheduled, total runs, and the success / failure split —
+shows an aggregate strip - total agents, how many are active right now,
+how many are scheduled, total runs, and the success / failure split -
 so you can size up your whole agent fleet at a glance.
 
 ---
@@ -520,7 +528,7 @@ so you can size up your whole agent fleet at a glance.
 - **Browser sessions** runs in an isolated cloud sandboxed containers with automatic TTL cleanup
 - **Agent credentials** are held in memory only during execution and never persisted to disk
 - **Session tokens** are cryptographically random with TTL-based expiration
-- **Auto-cleanup** — screenshots, agent logs, and uploaded files are
+- **Auto-cleanup** - screenshots, agent logs, and uploaded files are
   garbage-collected on rolling retention windows (default 7–30 days,
   admin-configurable). Deleting a bot or your account cascade-deletes
   every file, screenshot, memory, and credential tied to it.
